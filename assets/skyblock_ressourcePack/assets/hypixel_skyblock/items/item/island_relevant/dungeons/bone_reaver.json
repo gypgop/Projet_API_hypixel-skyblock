@@ -1,0 +1,1 @@
+{"model":{"type":"select","property":"display_context","cases":[{"model":{"type":"model","model":"hypixel_skyblock:item/island_relevant/dungeons/bone_reaver"},"when":["gui","ground","fixed","on_shelf"]}],"fallback":{"type":"model","model":"hypixel_skyblock:item/island_relevant/dungeons/bone_reaver_in_hand"}}}

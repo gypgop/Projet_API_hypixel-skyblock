@@ -1,0 +1,1 @@
+{"model":{"type":"select","property":"display_context","cases":[{"model":{"type":"model","model":"hypixel_skyblock:item/uncategorized/staff_of_the_rising_sun"},"when":["gui","ground","fixed","on_shelf"]}],"fallback":{"type":"model","model":"hypixel_skyblock:item/uncategorized/staff_of_the_rising_sun_in_hand"}}}

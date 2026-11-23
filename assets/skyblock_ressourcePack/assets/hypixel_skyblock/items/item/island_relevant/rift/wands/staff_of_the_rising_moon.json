@@ -1,0 +1,1 @@
+{"model":{"type":"select","property":"display_context","cases":[{"model":{"type":"model","model":"hypixel_skyblock:item/island_relevant/rift/wands/staff_of_the_rising_moon"},"when":["gui","ground","fixed","on_shelf"]}],"fallback":{"type":"model","model":"hypixel_skyblock:item/island_relevant/rift/wands/staff_of_the_rising_moon_in_hand"}}}
