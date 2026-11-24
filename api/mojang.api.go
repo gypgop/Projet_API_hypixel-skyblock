@@ -21,16 +21,16 @@ func GetPlayerUUID(PlayerName string) (models.PlayerUUId, error) {
 
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
 	if err != nil {
-		fmt.Printf("erreur, %v", err)
+		// fmt.Printf("erreur, %v", err)
 		return models.PlayerUUId{}, err
 	}
 
-	fmt.Printf("%v\n", request)
+	// fmt.Printf("%v\n", request)
 
 	response, err := client.Do(request)
 
 	if err != nil {
-		fmt.Printf("erreur, %v", err)
+		// fmt.Printf("erreur, %v", err)
 		return models.PlayerUUId{}, err
 	}
 	defer response.Body.Close()

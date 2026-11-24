@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"initial/api"
 	"net/http"
 	"strings"
 )
@@ -21,8 +22,10 @@ func SkyTrackPageHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("DEBUG: Paramètre PlayerName manquant ou vide")
 		http.Error(w, "Veuillez indiquer un PlayerName", http.StatusBadRequest)
 		return
+	} else {
+		PlayerUUID, err := api.GetPlayerUUID(playerName)
+		fmt.Printf("%s %v\n", PlayerUUID, err)
 	}
-
 	fmt.Printf("DEBUG: Succès ! PlayerName = %s\n", playerName)
 	fmt.Fprintf(w, "Joueur trouvé : %s", playerName)
 
