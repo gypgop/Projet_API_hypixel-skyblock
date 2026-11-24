@@ -1,2 +1,2 @@
 # Projet_API_hypixel-skyblock
-Projet using hypixel's APIs
+School project using hypixel's APIs
