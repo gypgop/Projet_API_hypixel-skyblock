@@ -1,7 +1,5 @@
 package models
 
-package main
-
 type Perk struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -9,10 +7,10 @@ type Perk struct {
 }
 
 type Candidate struct {
-	Key    string `json:"key"`
-	Name   string `json:"name"`
-	Perks  []Perk `json:"perks"`
-	Votes  int    `json:"votes"`
+	Key   string `json:"key"`
+	Name  string `json:"name"`
+	Perks []Perk `json:"perks"`
+	Votes int    `json:"votes"`
 }
 
 type Mayor struct {

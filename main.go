@@ -2,39 +2,25 @@ package main
 
 import (
 	"fmt"
+	"initial/controllers"
 	"log"
 	"net/http"
-	// "initial/controllers"
 )
 
 func main() {
+	fmt.Printf("DEBUG: execution du main\n")
+
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
 			return
 		}
-		http.ServeFile(w, r, "templates/mayor.html")
+		http.ServeFile(w, r, "templates/menu.html")
 	})
 
-	var id string
-
-	log.Printf("aaaa")
-	http.HandleFunc("/Player", func(w http.ResponseWriter, r *http.Request) {
-		id = r.URL.Query().Get("PlayerId")
-
-		fmt.Fprintf(w, "PlayerUserName reçu: %s\n", id)
-
-		if id[0] >= '0' && id[0] <= '9' {
-
-		} else if id[0] >= 'a' && id[0] <= 'z' {
-
-		} else {
-			fmt.Fprintf(w, "erreur\n")
-		}
-
-		fmt.Fprintf(w, "Le pokemon est : %+v\n", pokemon)
-	})
+	http.HandleFunc("/Player", controllers.SkyTrackPageHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
