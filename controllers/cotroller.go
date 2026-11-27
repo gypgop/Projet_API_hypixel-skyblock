@@ -23,7 +23,7 @@ func SkyTrackPageHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Veuillez indiquer un PlayerName", http.StatusBadRequest)
 		return
 	}
-	PlayerUUID, PlayerSkin, err := api.GetPlayerUUID(playerName) // should be calling HypixelSkyblock APIs and hypixel API should call GetPlayerUUID
+	PlayerUUID, PlayerSkin, playerName, err := api.GetPlayerUUID(playerName) // should be calling HypixelSkyblock APIs and hypixel API should call GetPlayerUUID
 
 	fmt.Printf("DEBUG: Succès ! PlayerName = %s\n", playerName)
 	fmt.Printf("%s\n%s\n %v\n", PlayerUUID, PlayerSkin, err)

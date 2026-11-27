@@ -50,16 +50,18 @@ type PlayerUUId struct {
 //-----------------------------Player Skin-----------------------------------\\
 
 type PlayerProperties struct {
-	Properties []SkinBase64 `json:"properties"`
+	Properties  []SkinBase64 `json:"properties"`
+	ProfileName string       `json:"name"`
 }
 
 type SkinBase64 struct {
 	Value string `json:"value"`
 }
 
+//after base64 decode
+
 type PlayerInfo struct {
-	ProfileName string       `json:"profileName"`
-	Textures    SkinTextures `json:"textures"`
+	Textures SkinTextures `json:"textures"`
 }
 
 type SkinTextures struct {

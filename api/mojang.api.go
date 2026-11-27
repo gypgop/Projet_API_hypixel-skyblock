@@ -14,9 +14,9 @@ var client = &http.Client{Timeout: 5 * time.Second}
 
 var ErrPlayerNotFound = errors.New("Unknown player")
 
-func GetPlayerUUID(PlayerName string) (models.PlayerUUId, []byte, error) {
+func GetPlayerUUID(PlayerName string) (models.PlayerUUId, []byte, string, error) {
 
-	fmt.Printf("Entrée GetPlayerUUID\n")
+	fmt.Printf("Enter GetPlayerUUID\n")
 
 	var baseURL = "https://api.mojang.com/users/profiles/minecraft/"
 
@@ -25,39 +25,40 @@ func GetPlayerUUID(PlayerName string) (models.PlayerUUId, []byte, error) {
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
 	if err != nil {
 		// fmt.Printf("erreur, %v", err)
-		return models.PlayerUUId{}, []byte{}, ErrPlayerNotFound
+		return models.PlayerUUId{}, []byte{}, "-1", ErrPlayerNotFound
 	}
 
-	fmt.Printf("%v\n", request)
+	fmt.Printf("\n%v\n\n", request)
 
 	response, err := client.Do(request)
 
 	if err != nil {
 		// fmt.Printf("erreur, %v", err)
-		return models.PlayerUUId{}, []byte{}, ErrPlayerNotFound
+		return models.PlayerUUId{}, []byte{}, "-1", ErrPlayerNotFound
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return models.PlayerUUId{}, []byte{}, ErrPlayerNotFound
+		return models.PlayerUUId{}, []byte{}, "-1", ErrPlayerNotFound
 
 	}
 
 	var PlayerUUID models.PlayerUUId
 	err = json.NewDecoder(response.Body).Decode(&PlayerUUID)
 	if err != nil {
-		return models.PlayerUUId{}, []byte{}, err
+		return models.PlayerUUId{}, []byte{}, "-1", err
 	}
 
-	PlayerSkin, err := GetPlayerSkin(PlayerUUID)
+	PlayerSkin, name, err := GetPlayerSkin(PlayerUUID)
 
-	return PlayerUUID, PlayerSkin, err
+	fmt.Printf("playername returned from getplayerSkin = %s\n", name)
+	return PlayerUUID, PlayerSkin, name, err
 
 }
 
-func GetPlayerSkin(PlayerUUID models.PlayerUUId) ([]byte, error) {
+func GetPlayerSkin(PlayerUUID models.PlayerUUId) ([]byte, string, error) {
 
-	fmt.Printf("Entrée GetPlayerSkin\n")
+	fmt.Printf("Enter GetPlayerSkin\n")
 
 	var baseURL = "https://sessionserver.mojang.com/session/minecraft/profile/"
 
@@ -66,43 +67,53 @@ func GetPlayerSkin(PlayerUUID models.PlayerUUId) ([]byte, error) {
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
 	if err != nil {
 		fmt.Printf("erreur, %v\n", err)
-		return []byte{}, err
+		return []byte{}, "-1", err
 	}
 
-	fmt.Printf("%v\n", request)
+	fmt.Printf("\n%v\n\n", request)
 
 	response, err := client.Do(request)
 
 	if err != nil {
 		fmt.Printf("erreur, %v\n", err)
-		return []byte{}, err
+		return []byte{}, "-1", err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return []byte{}, ErrPlayerNotFound
+		return []byte{}, "-1", ErrPlayerNotFound
 
 	}
 
 	var PlayerModel models.PlayerProperties
 	err = json.NewDecoder(response.Body).Decode(&PlayerModel)
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, "-1", err
 	}
 
-	fmt.Printf("%v\n", PlayerModel)
+	// fmt.Printf("%v\n", PlayerModel)
 
 	if len(PlayerModel.Properties) == 0 {
-		return []byte{}, errors.New("Mojang response has no player properties")
+		return []byte{}, "-1", errors.New("Mojang response has no player properties")
 	}
 
 	decoded, err := base64.StdEncoding.DecodeString(PlayerModel.Properties[0].Value)
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, "-1", err
 	}
 
-	fmt.Printf("Base64 Decoder : %s\n", decoded)
+	var PlayerSkin models.PlayerInfo
+	PlayerSkin, err = IsolatePlayerInfo(decoded)
+	fmt.Printf("PlayerSkin = ", PlayerSkin)
+	return []byte(PlayerModel.Properties[0].Value), PlayerModel.ProfileName, nil
 
-	return decoded, nil
+}
 
+func IsolatePlayerInfo(decoded []byte) (models.PlayerInfo, error) {
+
+	fmt.Printf("entrée IsolatePlayerInfo with Decoder = %s\n", decoded)
+	var PlayerData models.PlayerInfo
+	err := json.Unmarshal(decoded, &PlayerData)
+	fmt.Printf("\nIsolate: %s %s\n", PlayerData, err)
+	return models.PlayerInfo{}, err
 }
