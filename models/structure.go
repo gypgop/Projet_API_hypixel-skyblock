@@ -46,3 +46,31 @@ type ElectionData struct {
 type PlayerUUId struct {
 	UUID string `json:"id"`
 }
+
+//-----------------------------Player Skin-----------------------------------\\
+
+type PlayerProperties struct {
+	Properties []SkinBase64 `json:"properties"`
+}
+
+type SkinBase64 struct {
+	Value string `json:"value"`
+}
+
+type PlayerInfo struct {
+	ProfileName string       `json:"profileName"`
+	Textures    SkinTextures `json:"textures"`
+}
+
+type SkinTextures struct {
+	Skin SkinData `json:"SKIN"`
+}
+
+type SkinData struct {
+	URL      string       `json:"url"`
+	Metadata SkinMetadata `json:"metadata"`
+}
+
+type SkinMetadata struct {
+	Model string `json:"model"`
+}

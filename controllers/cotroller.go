@@ -22,11 +22,11 @@ func SkyTrackPageHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("DEBUG: Paramètre PlayerName manquant ou vide")
 		http.Error(w, "Veuillez indiquer un PlayerName", http.StatusBadRequest)
 		return
-	} else {
-		PlayerUUID, err := api.GetPlayerUUID(playerName)
-		fmt.Printf("%s %v\n", PlayerUUID, err)
 	}
+	PlayerUUID, PlayerSkin, err := api.GetPlayerUUID(playerName) // should be calling HypixelSkyblock APIs and hypixel API should call GetPlayerUUID
+
 	fmt.Printf("DEBUG: Succès ! PlayerName = %s\n", playerName)
+	fmt.Printf("%s\n%s\n %v\n", PlayerUUID, PlayerSkin, err)
 	fmt.Fprintf(w, "Joueur trouvé : %s", playerName)
 
 }
